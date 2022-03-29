@@ -38,17 +38,22 @@ spec:
               containerPort: 6167
               protocol: TCP
           env:
-            - name: CONDUIT_CONFIG
+            - name: dendrite_CONFIG
               value: /etc/dendrite/dendrite.toml
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /etc/dendrite
               name: config
+            - mountPath: /etc/dendrite/keys
+              name: signing-key
       volumes:
         - name: config
           configMap:
             name: {{ include "dendrite.fullname" . }}-config
+        - name: signing-key
+          secret:
+            secretName: {{ include "dendrite.fullname" . }}-signing-key
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
