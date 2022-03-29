@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "conduit.fullname" . }}
+  labels:
+    {{- include "conduit.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      name: http
+      targetPort: conduit
+      protocol: TCP 
+  selector:
+    {{- include "conduit.selectorLabels" . | nindent 4 }}
