@@ -200,7 +200,7 @@ data:
 
     room_server:
       database:
-        connection_string: file:roomserver.db?sslmode=disable
+        connection_string: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_roomserver?sslmode=disable
         max_open_conns: 10
         max_idle_conns: 2
         conn_max_lifetime: -1
