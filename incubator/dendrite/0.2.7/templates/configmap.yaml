@@ -89,7 +89,7 @@ data:
 
     app_service_api:
       database:
-        connection_string: postgresql://{{ .Values.postgresql.username }}:{{ .Values.postgresql.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_appservice?sslmode=disable
+        connection_string: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_appservice?sslmode=disable
         max_open_conns: 10
         max_idle_conns: 2
         conn_max_lifetime: -1
@@ -137,7 +137,7 @@ data:
       external_api:
         listen: http://[::]:8072
       database:
-        connection_string: postgresql://{{ .Values.postgresql.username }}:{{ .Values.postgresql.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_federationapi?sslmode=disable
+        connection_string: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_federationapi?sslmode=disable
         max_open_conns: 10
         max_idle_conns: 2
         conn_max_lifetime: -1
@@ -155,7 +155,7 @@ data:
     
     key_server:
       database:
-        connection_string: postgresql://{{ .Values.postgresql.username }}:{{ .Values.postgresql.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_keyserver?sslmode=disable
+        connection_string: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_keyserver?sslmode=disable
         max_open_conns: 10
         max_idle_conns: 2
         conn_max_lifetime: -1
@@ -164,7 +164,7 @@ data:
       external_api:
         listen: http://[::]:8074
       database:
-        connection_string: postgresql://{{ .Values.postgresql.username }}:{{ .Values.postgresql.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_mediaapi?sslmode=disable
+        connection_string: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_mediaapi?sslmode=disable
         max_open_conns: 5
         max_idle_conns: 2
         conn_max_lifetime: -1
@@ -193,7 +193,7 @@ data:
         - msc2836
         - msc2946
       database:
-        connection_string: postgresql://{{ .Values.postgresql.username }}:{{ .Values.postgresql.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_mscs?sslmode=disable
+        connection_string: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_mscs?sslmode=disable
         max_open_conns: 5
         max_idle_conns: 2
         conn_max_lifetime: -1
@@ -209,7 +209,7 @@ data:
       external_api:
         listen: http://[::]:8073
       database:
-        connection_string: postgresql://{{ .Values.postgresql.username }}:{{ .Values.postgresql.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_syncapi?sslmode=disable
+        connection_string: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_syncapi?sslmode=disable
         max_open_conns: 10
         max_idle_conns: 2
         conn_max_lifetime: -1
@@ -221,7 +221,7 @@ data:
 
     user_api:
       account_database:
-        connection_string: postgresql://{{ .Values.postgresql.username }}:{{ .Values.postgresql.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_useraccounts?sslmode=disable
+        connection_string: postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ include "dendrite.fullname" . }}-postgresql/dendrite_useraccounts?sslmode=disable
         max_open_conns: 10
         max_idle_conns: 2
         conn_max_lifetime: -1
