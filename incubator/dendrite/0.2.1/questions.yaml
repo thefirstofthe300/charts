@@ -1,0 +1,83 @@
+groups:
+  - name: "Dendrite Configuration"
+    description: "Configuration to be used with Dendrite"
+  - name: "Postgres Configuration"
+    description: "Image to be used for container"
+questions:
+  - variable: postgresql
+    label: "Postgres"
+    description: "Configuration for postgres"
+    group: "Postgres Configuration"
+    schema:
+      type: dict
+      required: true
+      attrs:
+        - variable: auth
+          description: "Authentication information"
+          label: "User account to create for Dendrite"
+          schema:
+            type: dict
+            required: true
+            attrs:
+              - variable: username
+                description: "Username"
+                label: "Username"
+                schema:
+                  type: string
+                  required: true
+              - variable: password
+                description: "password"
+                label: "password"
+                schema:
+                  type: string
+                  required: true
+  - variable: registration
+    label: "Registration"
+    description: "Configure user registration for domain"
+    group: "Dendrite Configuration"
+    schema:
+      type: dict
+      required: true
+      attrs:
+        - variable: sharedSecret
+          description: "Shared secret"
+          label: "Shared secret to allow people to still register even when registration is disabled"
+          schema:
+            type: string
+  - variable: signingKeys
+    label: "All active and decommissioned signing keys for the domain"
+    description: ""
+    group: "Dendrite Configuration"
+    schema:
+      type: dict
+      required: true
+      attrs:
+        - variable: activeKey
+          description: "Currently active signing key in PEM format"
+          label: "Current signing key"
+          schema:
+            type: string
+            required: true
+        - variable: inactiveKeys
+          description: "All decommissioned signing keys in PEM format"
+          label: "Old signing keys"
+          schema:
+            type: list
+            items:
+              - variable: oldSigningKey
+                label: "Old signing key"
+                schema:
+                  type: dict
+                  attrs:
+                    - variable: key
+                      label: "Key"
+                      description: "Key in PEM format"
+                      schema:
+                        type: string
+                        required: true
+                    - variable: expiration
+                      label: "Expiration"
+                      description: "Time in milliseconds since the Unix epoch"
+                      schema:
+                        type: string
+                        required: true
