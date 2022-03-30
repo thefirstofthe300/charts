@@ -89,6 +89,7 @@ postgresql:
       scripts:
         create_db.sh: |
           #! /usr/bin/env bash
+          export PGPASSWORD=${POSTGRES_PASSWORD}
           for db in appservice federationapi keyserver mediaapi mscs syncapi useraccounts; do
             createdb -U dendrite -O dendrite dendrite_$db
           done
