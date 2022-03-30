@@ -87,10 +87,11 @@ postgresql:
   primary:
     initdb:
       scripts:
-        #! /usr/bin/env bash
-        for db in appservice federationapi keyserver mediaapi mscs syncapi useraccounts; do
-        createdb -U dendrite -O dendrite dendrite_$db
-        done
+        create_db.sh: |
+          #! /usr/bin/env bash
+          for db in appservice federationapi keyserver mediaapi mscs syncapi useraccounts; do
+            createdb -U dendrite -O dendrite dendrite_$db
+          done
 
 appservice:
   registrationFiles: []
