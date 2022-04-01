@@ -37,7 +37,7 @@ service:
   port: 443
 
 ingress:
-  enabled: false
+  enabled: true
   className: ""
   annotations:
     {}
@@ -48,10 +48,10 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  tls:
+    - secretName: chart-example-tls
+      hosts:
+        - chart-example.local
 
 resources:
   {}

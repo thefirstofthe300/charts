@@ -1,0 +1,452 @@
+groups:
+  - name: "Dendrite Configuration"
+    description: "Configuration to be used with Dendrite"
+  - name: "Postgres Configuration"
+    description: "Image to be used for container"
+questions:
+  - variable: postgresql
+    label: "Postgres"
+    description: "Configuration for postgres"
+    group: "Postgres Configuration"
+    schema:
+      type: dict
+      required: true
+      attrs:
+        - variable: auth
+          description: "Authentication information"
+          label: "User account to create for Dendrite"
+          schema:
+            type: dict
+            required: true
+            attrs:
+              - variable: username
+                description: "Username"
+                label: "Username"
+                schema:
+                  type: string
+                  required: true
+              - variable: password
+                description: "password"
+                label: "password"
+                schema:
+                  type: string
+                  required: true
+  - variable: registration
+    label: "Registration"
+    description: "Configure user registration for domain"
+    group: "Dendrite Configuration"
+    schema:
+      type: dict
+      required: true
+      attrs:
+        - variable: sharedSecret
+          description: "Shared secret"
+          label: "Shared secret to allow people to still register even when registration is disabled"
+          schema:
+            type: string
+  - variable: signingKeys
+    label: "All active and decommissioned signing keys for the domain"
+    description: ""
+    group: "Dendrite Configuration"
+    schema:
+      type: dict
+      required: true
+      attrs:
+        - variable: activeKey
+          description: "Currently active signing key in PEM format"
+          label: "Current signing key"
+          schema:
+            type: string
+            required: true
+        - variable: inactiveKeys
+          description: "All decommissioned signing keys in PEM format"
+          label: "Old signing keys"
+          schema:
+            type: list
+            items:
+              - variable: oldSigningKey
+                label: "Old signing key"
+                schema:
+                  type: dict
+                  attrs:
+                    - variable: key
+                      label: "Key"
+                      description: "Key in PEM format"
+                      schema:
+                        type: string
+                        required: true
+                    - variable: expiration
+                      label: "Expiration"
+                      description: "Time in milliseconds since the Unix epoch"
+                      schema:
+                        type: string
+                        required: true
+  - variable: ingress
+    label: ""
+    group: "Ingress"
+    schema:
+      additional_attrs: true
+      type: dict
+      attrs:
+        - variable: enabled
+          label: "Enable Ingress"
+          schema:
+            type: boolean
+            default: false
+            show_subquestions_if: true
+            subquestions:
+              - variable: hosts
+                label: "Hosts"
+                schema:
+                  type: list
+                  default: []
+                  items:
+                    - variable: hostEntry
+                      label: "Host"
+                      schema:
+                        additional_attrs: true
+                        type: dict
+                        attrs:
+                          - variable: host
+                            label: "HostName"
+                            schema:
+                              type: string
+                              default: ""
+                              required: true
+                          - variable: paths
+                            label: "Paths"
+                            schema:
+                              type: list
+                              default: []
+                              items:
+                                - variable: pathEntry
+                                  label: "Host"
+                                  schema:
+                                    additional_attrs: true
+                                    type: dict
+                                    attrs:
+                                      - variable: path
+                                        label: "path"
+                                        schema:
+                                          type: string
+                                          required: true
+                                          default: "/"
+                                      - variable: pathType
+                                        label: "pathType"
+                                        schema:
+                                          type: string
+                                          required: true
+                                          default: "Prefix"
+        - variable: expert
+          label: "Show Expert Configuration Options"
+          schema:
+            type: boolean
+            default: false
+            show_subquestions_if: true
+            subquestions:
+              - variable: enableFixedMiddlewares
+                description: "These middlewares enforce a number of best practices."
+                label: "Enable Default Middlewares"
+                schema:
+                  type: boolean
+                  default: true
+              - variable: ingressClassName
+                label: "IngressClass Name"
+                schema:
+                  type: string
+                  default: ""
+              - variable: labelsList
+                label: "Labels"
+                schema:
+                  type: list
+                  default: []
+                  items:
+                    - variable: labelItem
+                      label: "Label"
+                      schema:
+                        additional_attrs: true
+                        type: dict
+                        attrs:
+                          - variable: name
+                            label: "Name"
+                            schema:
+                              type: string
+                          - variable: value
+                            label: "Value"
+                            schema:
+                              type: string
+              - variable: annotationsList
+                label: "Annotations"
+                schema:
+                  type: list
+                  default: []
+                  items:
+                    - variable: annotationItem
+                      label: "Label"
+                      schema:
+                        additional_attrs: true
+                        type: dict
+                        attrs:
+                          - variable: name
+                            label: "Name"
+                            schema:
+                              type: string
+                          - variable: value
+                            label: "Value"
+                            schema:
+                              type: string
+  - variable: ingressList
+    label: "Add Manual Custom Ingresses"
+    group: "Ingress"
+    schema:
+      type: list
+      default: []
+      items:
+        - variable: ingressListEntry
+          label: "Custom Ingress"
+          schema:
+            additional_attrs: true
+            type: dict
+            attrs:
+              - variable: enabled
+                label: "Enable Ingress"
+                schema:
+                  type: boolean
+                  default: true
+                  hidden: true
+              - variable: name
+                label: "Name"
+                schema:
+                  type: string
+                  default: ""
+              - variable: ingressClassName
+                label: "IngressClass Name"
+                schema:
+                  type: string
+                  default: ""
+              - variable: labelsList
+                label: "Labels"
+                schema:
+                  type: list
+                  default: []
+                  items:
+                    - variable: labelItem
+                      label: "Label"
+                      schema:
+                        additional_attrs: true
+                        type: dict
+                        attrs:
+                          - variable: name
+                            label: "Name"
+                            schema:
+                              type: string
+                          - variable: value
+                            label: "Value"
+                            schema:
+                              type: string
+              - variable: annotationsList
+                label: "Annotations"
+                schema:
+                  type: list
+                  default: []
+                  items:
+                    - variable: annotationItem
+                      label: "Label"
+                      schema:
+                        additional_attrs: true
+                        type: dict
+                        attrs:
+                          - variable: name
+                            label: "Name"
+                            schema:
+                              type: string
+                          - variable: value
+                            label: "Value"
+                            schema:
+                              type: string
+              - variable: hosts
+                label: "Hosts"
+                schema:
+                  type: list
+                  default: []
+                  items:
+                    - variable: hostEntry
+                      label: "Host"
+                      schema:
+                        additional_attrs: true
+                        type: dict
+                        attrs:
+                          - variable: host
+                            label: "HostName"
+                            schema:
+                              type: string
+                              default: ""
+                              required: true
+                          - variable: paths
+                            label: "Paths"
+                            schema:
+                              type: list
+                              default: []
+                              items:
+                                - variable: pathEntry
+                                  label: "Host"
+                                  schema:
+                                    additional_attrs: true
+                                    type: dict
+                                    attrs:
+                                      - variable: path
+                                        label: "path"
+                                        schema:
+                                          type: string
+                                          required: true
+                                          default: "/"
+                                      - variable: pathType
+                                        label: "pathType"
+                                        schema:
+                                          type: string
+                                          required: true
+                                          default: "Prefix"
+                                      - variable: service
+                                        label: "Linked Service"
+                                        schema:
+                                          additional_attrs: true
+                                          type: dict
+                                          attrs:
+                                            - variable: name
+                                              label: "Service Name"
+                                              schema:
+                                                type: string
+                                                default: ""
+                                            - variable: port
+                                              label: "Service Port"
+                                              schema:
+                                                type: int
+              - variable: tls
+                label: "TLS-Settings"
+                schema:
+                  type: list
+                  default: []
+                  items:
+                    - variable: tlsEntry
+                      label: "Host"
+                      schema:
+                        additional_attrs: true
+                        type: dict
+                        attrs:
+                          - variable: hosts
+                            label: "Certificate Hosts"
+                            schema:
+                              type: list
+                              default: []
+                              items:
+                                - variable: host
+                                  label: "Host"
+                                  schema:
+                                    type: string
+                                    default: ""
+                                    required: true
+                          - variable: scaleCert
+                            label: "Select TrueNAS SCALE Certificate"
+                            schema:
+                              type: int
+                              $ref:
+                                - "definitions/certificate"
+              - variable: entrypoint
+                label: "Traefik Entrypoint"
+                description: "Entrypoint used by Traefik when using Traefik as Ingress Provider"
+                schema:
+                  type: string
+                  default: "websecure"
+                  required: true
+              - variable: middlewares
+                label: "Traefik Middlewares"
+                description: "Add previously created Traefik Middlewares to this Ingress"
+                schema:
+                  type: list
+                  default: []
+                  items:
+                    - variable: name
+                      label: "Name"
+                      schema:
+                        type: string
+                        default: ""
+                        required: true
+                    - variable: tls
+                      label: "TLS-Settings"
+                      schema:
+                        type: list
+                        default: []
+                        items:
+                          - variable: tlsEntry
+                            label: "Host"
+                            schema:
+                              additional_attrs: true
+                              type: dict
+                              attrs:
+                                - variable: hosts
+                                  label: "Certificate Hosts"
+                                  schema:
+                                    type: list
+                                    default: []
+                                    items:
+                                      - variable: host
+                                        label: "Host"
+                                        schema:
+                                          type: string
+                                          default: ""
+                                          required: true
+                                - variable: scaleCert
+                                  label: "Select TrueNAS SCALE Certificate"
+                                  schema:
+                                    type: int
+                                    $ref:
+                                      - "definitions/certificate"
+              - variable: enabled
+                label: "Enable Ingress"
+                schema:
+                  type: boolean
+                  default: false
+                  show_subquestions_if: true
+                  subquestions:
+                    - variable: hosts
+                      label: "Hosts"
+                      schema:
+                        type: list
+                        default: []
+                        items:
+                          - variable: hostEntry
+                            label: "Host"
+                            schema:
+                              additional_attrs: true
+                              type: dict
+                              attrs:
+                                - variable: host
+                                  label: "HostName"
+                                  schema:
+                                    type: string
+                                    default: ""
+                                    required: true
+                                - variable: paths
+                                  label: "Paths"
+                                  schema:
+                                    type: list
+                                    default: []
+                                    items:
+                                      - variable: pathEntry
+                                        label: "Host"
+                                        schema:
+                                          additional_attrs: true
+                                          type: dict
+                                          attrs:
+                                            - variable: path
+                                              label: "path"
+                                              schema:
+                                                type: string
+                                                required: true
+                                                default: "/"
+                                            - variable: pathType
+                                              label: "pathType"
+                                              schema:
+                                                type: string
+                                                required: true
+                                                default: "Prefix"
