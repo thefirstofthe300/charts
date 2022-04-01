@@ -60,3 +60,33 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{- define "traefik.certAvailable" -}}
+{{- if .Values.certificate -}}
+{{- $values := (. | mustDeepCopy) -}}
+{{- $_ := set $values "commonCertOptions" (dict "certKeyName" $values.Values.certificate) -}}
+{{- template "common.resources.cert_present" $values -}}
+{{- else -}}
+{{- false -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Retrieve public key of certificate
+*/}}
+{{- define "traefik.cert.publicKey" -}}
+{{- $values := (. | mustDeepCopy) -}}
+{{- $_ := set $values "commonCertOptions" (dict "certKeyName" $values.Values.certificate "publicKey" true) -}}
+{{ include "common.resources.cert" $values }}
+{{- end -}}
+
+
+{{/*
+Retrieve private key of certificate
+*/}}
+{{- define "traefik.cert.privateKey" -}}
+{{- $values := (. | mustDeepCopy) -}}
+{{- $_ := set $values "commonCertOptions" (dict "certKeyName" $values.Values.certificate) -}}
+{{ include "common.resources.cert" $values }}
+{{- end -}}

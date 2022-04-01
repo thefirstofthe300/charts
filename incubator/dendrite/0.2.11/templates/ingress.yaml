@@ -33,7 +33,7 @@ spec:
         {{- range .hosts }}
         - {{ . | quote }}
         {{- end }}
-      secretName: {{ .secretName }}
+      secretName: {{ ( printf "%v-%v-%v-%v-%v" $fullName "tls" $index "ixcert" $.Release.Revision ) }}
     {{- end }}
   {{- end }}
   rules:

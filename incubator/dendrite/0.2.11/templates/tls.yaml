@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ ( printf "%v-%v-%v-%v-%v" $fullName "tls" $index "ixcert" $.Release.Revision ) }}
+type: Opaque
+data:
+  {{ if eq (include "traefik.certAvailable" .) "true" }}
+  certPublicKey: {{ (include "traefik.cert.publicKey" .) | toString | b64enc | quote }}
+  certPrivateKey: {{ (include "traefik.cert.privateKey" .) | toString | b64enc | quote }}
+  {{ end }}
