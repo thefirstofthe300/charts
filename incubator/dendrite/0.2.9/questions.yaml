@@ -2,7 +2,9 @@ groups:
   - name: "Dendrite Configuration"
     description: "Configuration to be used with Dendrite"
   - name: "Postgres Configuration"
-    description: "Image to be used for container"
+    description: "Postgres database configuration"
+  - name: "Ingress"
+    description: "Configure ingress for Dendrite"
 questions:
   - variable: postgresql
     label: "Postgres"
